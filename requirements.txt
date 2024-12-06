@@ -1,0 +1,4 @@
+python-dotenv==1.0.1
+openrouteservice==2.3.3
+ipykernel==6.29.5
+folium==0.18.0
