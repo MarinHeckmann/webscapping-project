@@ -3,11 +3,11 @@
 **Commandes pour rejoindre le projet :**
 
 *Cloner le dépôt :*
-
+````bash
 git clone https://github.com/MarinHeckmann/webscapping-project.git
 
 cd webscapping-project
-
+```
 *Créer un environnement virtuel Python :*
 
 python -m venv .venv
