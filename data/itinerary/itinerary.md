@@ -1,0 +1,2 @@
+Dataframes filtrant les clusters selon le nb d'activités que veut faire la personne et listant les différents itinéraires possibles de la forme:
+df_{city}_{language}_{cost}_{sportivity}_{num_activities}

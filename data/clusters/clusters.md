@@ -1,0 +1,2 @@
+dataframes rassemblant les activités dans de clusters autour d'un restaurant selon la sportivité de la personne (influançant le rayon du cluster) et le cout du restaurant de la forme:
+df_{city}_{language}_{cost}_{sportivity}
