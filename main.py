@@ -2,7 +2,7 @@ import os
 import json
 from geopy.geocoders import Nominatim
 from geopy.exc import GeopyError
-#from src.data_extraction.city_validation import validate_city
+from src.data_extraction.extract_websites import extract_websites
 from src.data_extraction.extract_tripadvisor import extract_tripadvisor
 from src.data_extraction.extract_michelin import extract_michelin
 from src.data_processing.cleaning import clean_data
@@ -11,9 +11,9 @@ from src.route_optimization.itinerary_generator import generate_itinerary
 from src.visualization.folium_map import create_map
 
 # Catégories
-COSTS = ['Affordable', 'Mid-Range', 'Premium', 'Luxury']
-SPORTIVITY_LEVELS = ['Low', 'Moderate', 'High', 'Extreme']
-LANGUAGES = ['English', 'French', 'German', 'Spanish', 'Italian', 'Portuguese']
+COSTS = {1: 'affordable', 2: 'mid-range', 3: 'premium', 4: 'luxury'}
+SPORTIVITY_LEVELS = {1: 'low', 2: 'moderate', 3: 'high', 4: 'extreme'}
+LANGUAGES = {1: 'english', 2: 'french', 3: 'german', 4: 'spanish', 5: 'italian', 6: 'portuguese'}
 
 
 def validate_city(city_name, country_name):
@@ -42,9 +42,9 @@ def validate_city(city_name, country_name):
             # Extraction du nom de la ville et du pays en anglais
             address_parts = location.address.split(", ")
             # On prend la première partie (ville) et la dernière (pays)
-            city_and_country = f"{address_parts[0]}, {address_parts[-1]}"
-            print(f"City found: {city_and_country}")
-            return city_and_country
+            city, country = f"{address_parts[0]}, {address_parts[-1]}"
+            print(f"City found: {city}, {country}")
+            return city, country
         else:
             print(f"City '{city_name}' in '{country_name}' not found.")
             return validate_city(input("Enter the city: "),input("Enter the country: "))
@@ -85,47 +85,43 @@ def get_choice(prompt, options_dict):
 
 
 # Vérification si un fichier existe et correspond aux paramètres
-def data_exists(directory, filename, params):
+def data_exists(directory, filename):
     filepath = os.path.join(directory, filename)
     if os.path.exists(filepath):
-        with open(filepath, "r") as f:
-            existing_params = json.load(f).get("params", {})
-        if existing_params == params:
-            print(f"Data already exists: {filepath}")
-            return filepath
+        print(f"Data already exists: {filepath}")
+        return filepath
     return None
 
 # Sauvegarde des données avec les paramètres associés
-def save_data(directory, filename, data, params):
+def save_data(directory, filename, dataframe):
+    if not filename.endswith(".csv"):
+        filename += ".csv"
     filepath = os.path.join(directory, filename)
     os.makedirs(directory, exist_ok=True)
-    with open(filepath, "w") as f:
-        json.dump({"params": params, "data": data}, f, indent=4)
-    print(f"Data saved: {filepath}")
-    return filepath
+    dataframe.to_csv(filepath, index=False)
+    print(f"DataFrame saved: {filepath}")
 
 def load_data(filepath):
     with open(filepath, "r") as f:
         return json.load(f)["data"]
 
-def main(city, language, num_activities, sportivity, price_category):
-    # Étape 1 : Vérification et standardisation de la ville
-    city_standard = validate_city(city)
-    if not city_standard:
-        print(f"Error: The city '{city}' could not be found or is not supported.")
-        return
-    print(f"Using standardized city name: {city_standard}")
-
+def main(city, country, language, num_activities, sportivity, price_category):
+    city_standard = city.replace("'","-").replace(" ", "-").lower()
+    country_standard = country.replace("'","-").replace(" ", "-").lower()
     # Params communs
-    raw_params = {"city": city_standard}
-    processed_params = {"city": city_standard, "language": language}
-    cluster_params = {"city": city_standard, "language": language, "sportivity": sportivity, "price_category": price_category}
+    raw_params = {"city": city_standard, "country":country_standard}
+    processed_params = {"city": city_standard, "country":country_standard,"language": language}
+    cluster_params = {"city": city, "country":country, "language": language, "sportivity": sportivity, "price_category": price_category}
     itinerary_params = {**cluster_params, "num_activities": num_activities}
+
+    raw_file = "df_" + "_".join(str(value) for value in raw_params.values()) + ".csv"
+    processed_file = "df_" + "_".join(str(value) for value in processed_params.values()) + ".csv"
+    cluster_file = "df_" + "_".join(str(value).replace(" ", "-").replace("'", "-").lower() for value in cluster_params.values()) + ".csv"
+    itinerary_file = "df_" + "_".join(str(value).replace(" ", "-").replace("'", "-").lower() for value in itinerary_params.values()) + ".csv"
 
     # Étape 2 : Extraction des données (raw)
     raw_dir = "data/raw"
-    raw_file = f"{city_standard.lower().replace(' ', '_')}_raw.json"
-    raw_path = data_exists(raw_dir, raw_file, raw_params)
+    raw_path = data_exists(raw_dir, raw_file)
     if raw_path:
         raw_data = load_data(raw_path)
     else:
@@ -133,44 +129,41 @@ def main(city, language, num_activities, sportivity, price_category):
         tripadvisor_data = extract_tripadvisor(city_standard)
         michelin_data = extract_michelin(city_standard)
         raw_data = {"tripadvisor": tripadvisor_data, "michelin": michelin_data}
-        save_data(raw_dir, raw_file, raw_data, raw_params)
+        save_data(raw_dir, raw_file, raw_data)
 
     # Étape 3 : Traitement des données (processed)
     processed_dir = "data/processed"
-    processed_file = f"{city_standard.lower().replace(' ', '_')}_processed.json"
-    processed_path = data_exists(processed_dir, processed_file, processed_params)
+    processed_path = data_exists(processed_dir, processed_file)
     if processed_path:
         processed_data = load_data(processed_path)
     else:
         print("Cleaning and processing data...")
         processed_data = clean_data(raw_data, language)
-        save_data(processed_dir, processed_file, processed_data, processed_params)
+        save_data(processed_dir, processed_file, processed_data)
 
     # Étape 4 : Clusterisation
     cluster_dir = "data/clusters"
-    cluster_file = f"{city_standard.lower().replace(' ', '_')}_clusters_{sportivity}_{price_category}.json"
-    cluster_path = data_exists(cluster_dir, cluster_file, cluster_params)
+    cluster_path = data_exists(cluster_dir, cluster_file)
     if cluster_path:
-        clusters = load_data(cluster_path)
+        clusters_data = load_data(cluster_path)
     else:
         print("Clustering data...")
-        clusters = create_clusters(processed_data, sportivity=sportivity, price_category=price_category)
-        save_data(cluster_dir, cluster_file, clusters, cluster_params)
+        clusters_data = create_clusters(processed_data, sportivity=sportivity, price_category=price_category)
+        save_data(cluster_dir, cluster_file, clusters_data)
 
     # Étape 5 : Génération de l'itinéraire
     itinerary_dir = "data/itinerary"
-    itinerary_file = f"{city_standard.lower().replace(' ', '_')}_itinerary_{num_activities}_{sportivity}_{price_category}.json"
     itinerary_path = data_exists(itinerary_dir, itinerary_file, itinerary_params)
     if itinerary_path:
-        itinerary = load_data(itinerary_path)
+        itinerary_data = load_data(itinerary_path)
     else:
         print("Generating itinerary...")
-        itinerary = generate_itinerary(clusters, num_activities=num_activities)
-        save_data(itinerary_dir, itinerary_file, itinerary, itinerary_params)
+        itinerary_data = generate_itinerary(clusters_data, num_activities=num_activities)
+        save_data(itinerary_dir, itinerary_file, itinerary_data)
 
     # Étape 6 : Création de la carte
     print("Creating map visualization...")
-    folium_map = create_map(itinerary)
+    folium_map = create_map(itinerary_data)
     map_file = f"data/output/{city_standard.lower().replace(' ', '_')}_map.html"
     os.makedirs("data/output", exist_ok=True)
     folium_map.save(map_file)
@@ -178,7 +171,7 @@ def main(city, language, num_activities, sportivity, price_category):
 
 if __name__ == "__main__":
     # Input parameters
-    city = validate_city(input("Enter the city: "),input("Enter the country: "))
+    city,country = validate_city(input("Enter the city: "),input("Enter the country: "))
     language = get_choice("Enter the number corresponding to your language: ", LANGUAGES)
     
     # Demander le nombre d'activités
@@ -191,4 +184,5 @@ if __name__ == "__main__":
     price_category = get_choice(f"Enter the number corresponding to your price category: ({', '.join(str(i) for i in COSTS.keys())}): ", COSTS)
     
     # Run the travel planner
-    main(city, language, num_activities, sportivity, price_category)
+    main(city,country, language, num_activities, sportivity, price_category)
+
