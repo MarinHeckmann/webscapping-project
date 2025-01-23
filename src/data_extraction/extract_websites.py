@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import csv
 import pandas as pd
 from googletrans import Translator
 import unicodedata
@@ -27,19 +26,6 @@ def fetch_and_parse_page(url):
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération de l'URL {url}: {e}")
         return None
-
-
-def save_html_to_txt(soup, filename,dir_path='C:/Users/glenn/OneDrive/Bureau/VScode saves/WebScrapping/Projet'):
-    """
-    Sauvegarde le contenu HTML formaté dans un fichier texte.
-    """
-    path=f'{dir_path}/{filename}.txt'
-    try:
-        with open(filename, "w", encoding="utf-8") as file:
-            file.write(soup.prettify())
-        print(f"HTML sauvegardé dans le fichier : {filename}")
-    except Exception as e:
-        print(f"Erreur lors de la sauvegarde du fichier : {e}")
 
 
 def extract_text_by_class(soup, balise,class_name):
@@ -117,7 +103,7 @@ def WorldTravelGuide_attractions(soup):
         # Extraire la description
         description_tag = article.find('p')
         if description_tag:
-            attraction_info['Description'] = description_tag.get_text(strip=True)
+            attraction_info['description'] = description_tag.get_text(strip=True)
 
 
         # Extraire les horaires d'ouverture
@@ -164,7 +150,7 @@ def CNTraveler_attractions(soup):
         attraction_info = {'Title': title}
         description_tag = article.find('p')
         if description_tag:
-            attraction_info['Description'] = description_tag.get_text(strip=True)
+            attraction_info['description'] = description_tag.get_text(strip=True)
         df_CNTraveler = pd.concat([df_CNTraveler, pd.DataFrame([attraction_info])], ignore_index=True)
     df_CNTraveler.insert(0, 'site', 'CNTraveler')
     df_CNTraveler['rank'] = range(len(df_CNTraveler))
@@ -181,7 +167,7 @@ def Routard_attractions(soup):
         attraction_info = {'Title': title}
         description_tag = article.find('div', class_='rtd-wysiwyg line-clamp-3')
         if description_tag:
-            attraction_info['Description'] = description_tag.get_text(strip=True)
+            attraction_info['description'] = description_tag.get_text(strip=True)
         df_Routard = pd.concat([df_Routard, pd.DataFrame([attraction_info])], ignore_index=True)
     df_Routard.insert(0, 'site', 'Routard')
     df_Routard['rank'] = range(len(df_Routard))
@@ -213,6 +199,7 @@ def country_to_continent(country_name):
     else: return None
 
 def routard_city_to_region(city):
+
     cities_to_regions = {
         "strasbourg": "alsace",
         "bordeaux": "aquitaine-bordelais-landes",
@@ -225,7 +212,10 @@ def routard_city_to_region(city):
         "nantes": "pays-de-la-loire",
         "marseille": "provence"
     }
-    return cities_to_regions[city]
+    if city not in cities_to_regions.values():
+        return None
+    else:
+        return cities_to_regions[city]
 
 def routard_continent(continent):
     routard_continent_fr = {
@@ -266,9 +256,9 @@ def extract_websites(country='france',city='paris',websites_to_call=['Routard','
     df=pd.DataFrame()
     for website in websites_to_call:
         soup=fetch_and_parse_page(URL_dict[website])
-        #save_html_to_txt(soup,f'{website}_{city}')
         if soup:
             df=pd.concat([df,URL_extractor[f'{website}_attractions'](soup)],ignore_index=True)
-    return (df)
+
+    return df
         
 

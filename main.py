@@ -1,56 +1,43 @@
 import os
 import json
+import pandas as pd
 from geopy.geocoders import Nominatim
 from geopy.exc import GeopyError
 from src.data_extraction.extract_websites import extract_websites
-from src.data_extraction.extract_tripadvisor import extract_tripadvisor
+#from src.data_extraction.extract_tripadvisor import extract_tripadvisor
 from src.data_extraction.extract_michelin import extract_michelin
-from src.data_processing.cleaning import clean_data
-from src.data_processing.clustering import create_clusters
+from src.data_processing.processing import processing_data
+from src.data_clustering.clustering import create_clusters
 from src.route_optimization.itinerary_generator import generate_itinerary
 from src.visualization.folium_map import create_map
 
 # Catégories
 COSTS = {1: 'affordable', 2: 'mid-range', 3: 'premium', 4: 'luxury'}
 SPORTIVITY_LEVELS = {1: 'low', 2: 'moderate', 3: 'high', 4: 'extreme'}
-LANGUAGES = {1: 'english', 2: 'french', 3: 'german', 4: 'spanish', 5: 'italian', 6: 'portuguese'}
-
+LANGUAGES = {1: 'en', 2: 'fr', 3: 'de', 4: 'es',  5: 'it', 6: 'pt'}
 
 def validate_city(city_name, country_name):
-    """
-    Valide et récupère le nom standardisé d'une ville avec le pays en anglais via l'API Nominatim d'OpenStreetMap.
-    Permet d'envoyer à la fois le nom de la ville et du pays pour une recherche plus précise.
-    
-    Args:
-        city_name (str): Le nom de la ville à valider.
-        country_name (str): Le nom du pays dans lequel chercher la ville.
-        
-    Returns:
-        str: Le nom standardisé de la ville et du pays en anglais, ou None si la ville n'est pas trouvée.
-    """
-    # Initialiser le géolocalisateur avec un user_agent
     geolocator = Nominatim(user_agent="city_validation_test")
-    
+    #time.sleep(1)
     try:
-        # Formater la requête avec la ville et le pays
         query = f"{city_name}, {country_name}"
-        
-        # Rechercher la ville dans le pays, en demandant les résultats en anglais
-        location = geolocator.geocode(query, addressdetails=True, exactly_one=True, language='en')
-        
+        location = geolocator.geocode(query, addressdetails=True, exactly_one=True, language='en', timeout=5)
+
         if location:
-            # Extraction du nom de la ville et du pays en anglais
-            address_parts = location.address.split(", ")
-            # On prend la première partie (ville) et la dernière (pays)
-            city, country = f"{address_parts[0]}, {address_parts[-1]}"
-            print(f"City found: {city}, {country}")
-            return city, country
+            address = location.raw.get('address', {})
+            region = address.get('state', address.get('region', address.get('province', address.get('country', None))))
+            city = address.get('city', address.get('town', address.get('village', None)))            
+            country = address.get('country', None)
+            if city is None:
+                city = region
+            #print(f"City found: {city}, {region}, {country}")
+            return city, region, country
         else:
             print(f"City '{city_name}' in '{country_name}' not found.")
-            return validate_city(input("Enter the city: "),input("Enter the country: "))
+            return None,None,None
     except GeopyError as e:
         print(f"Error querying city API: {e}")
-        return None
+        return None,None,None
 
 def get_choice(prompt, options_dict):
     """
@@ -93,56 +80,89 @@ def data_exists(directory, filename):
     return None
 
 # Sauvegarde des données avec les paramètres associés
-def save_data(directory, filename, dataframe):
-    if not filename.endswith(".csv"):
-        filename += ".csv"
-    filepath = os.path.join(directory, filename)
-    os.makedirs(directory, exist_ok=True)
-    dataframe.to_csv(filepath, index=False)
-    print(f"DataFrame saved: {filepath}")
+def save_data(directory, filename, data):
+    # Vérifier si l'objet est un DataFrame
+    if isinstance(data, pd.DataFrame):
+        # Ajouter l'extension .csv si elle n'est pas présente
+        if not filename.endswith(".csv"):
+            filename += ".csv"
+        filepath = os.path.join(directory, filename)
+        os.makedirs(directory, exist_ok=True)
+        data.to_csv(filepath, index=False)
+        print(f"DataFrame saved: {filepath}")
+
+    else:
+        # Ajouter l'extension .json si elle n'est pas présente
+        if not filename.endswith(".json"):
+            filename += ".json"
+        filepath = os.path.join(directory, filename)
+        os.makedirs(directory, exist_ok=True)
+        
+        # Sauvegarder en JSON avec indentation
+        with open(filepath, "w", encoding="utf-8") as json_file:
+            json.dump(data, json_file, ensure_ascii=False, indent=4)
+        print(f"JSON saved: {filepath}")
 
 def load_data(filepath):
-    with open(filepath, "r") as f:
-        return json.load(f)["data"]
+    with open(filepath, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    return pd.DataFrame(data['attractions']),pd.DataFrame(data['michelin'])
 
-def main(city, country, language, num_activities, sportivity, price_category):
+
+def main(city, region, country, language, num_activities, sportivity, price_category):
     city_standard = city.replace("'","-").replace(" ", "-").lower()
+    region_standard = region.replace("'","-").replace(" ", "-").lower()
     country_standard = country.replace("'","-").replace(" ", "-").lower()
     # Params communs
-    raw_params = {"city": city_standard, "country":country_standard}
-    processed_params = {"city": city_standard, "country":country_standard,"language": language}
-    cluster_params = {"city": city, "country":country, "language": language, "sportivity": sportivity, "price_category": price_category}
-    itinerary_params = {**cluster_params, "num_activities": num_activities}
+    raw_params = {"country":country_standard,"city": city_standard}
+    processed_params = {"country":country_standard,"city": city_standard}
+    cluster_params = {"country":country_standard, "city":city_standard, "sportivity": sportivity, "price_category": price_category,"num_activities": num_activities}
+    itinerary_params = {**cluster_params}
+    itinerary_comment_params = {**cluster_params, "language": language}
 
-    raw_file = "df_" + "_".join(str(value) for value in raw_params.values()) + ".csv"
-    processed_file = "df_" + "_".join(str(value) for value in processed_params.values()) + ".csv"
+
+    raw_file = "df_" + "_".join(str(value) for value in raw_params.values()) + ".json"
+    processed_file = "df_" + "_".join(str(value) for value in processed_params.values()) + ".json"
     cluster_file = "df_" + "_".join(str(value).replace(" ", "-").replace("'", "-").lower() for value in cluster_params.values()) + ".csv"
+    itinerary_file = "df_" + "_".join(str(value).replace(" ", "-").replace("'", "-").lower() for value in itinerary_params.values()) + ".csv"
     itinerary_file = "df_" + "_".join(str(value).replace(" ", "-").replace("'", "-").lower() for value in itinerary_params.values()) + ".csv"
 
     # Étape 2 : Extraction des données (raw)
-    raw_dir = "data/raw"
+    raw_dir = "data/raw/"
     raw_path = data_exists(raw_dir, raw_file)
     if raw_path:
-        raw_data = load_data(raw_path)
+        attractions_data,michelin_data = load_data(raw_path)
     else:
         print("Extracting raw data...")
-        tripadvisor_data = extract_tripadvisor(city_standard)
-        michelin_data = extract_michelin(city_standard)
-        raw_data = {"tripadvisor": tripadvisor_data, "michelin": michelin_data}
+        attractions_data = extract_websites(country_standard,city_standard)
+        michelin_data = extract_michelin(country_standard,region_standard,city_standard)
+        # Vérification si les données sont vides
+        if len(attractions_data)== 0 or len(michelin_data)==0:
+            print("Erreur : nous n'avons pas trouvé de données suffisantes pour cette ville")
+            return
+        raw_data = {
+            "attractions": attractions_data.to_dict(orient="records") if isinstance(attractions_data, pd.DataFrame) else attractions_data,
+            "michelin": michelin_data.to_dict(orient="records") if isinstance(michelin_data, pd.DataFrame) else michelin_data
+        }
+
         save_data(raw_dir, raw_file, raw_data)
 
     # Étape 3 : Traitement des données (processed)
-    processed_dir = "data/processed"
+    processed_dir = "data/processed/"
     processed_path = data_exists(processed_dir, processed_file)
     if processed_path:
-        processed_data = load_data(processed_path)
+        attractions_data_process , michelin_data_process = load_data(processed_path)
     else:
         print("Cleaning and processing data...")
-        processed_data = clean_data(raw_data, language)
+        attractions_data_process, michelin_data_process = processing_data(attractions_data,michelin_data,country,city)
+        processed_data = {
+            "attractions": attractions_data_process.to_dict(orient="records") if isinstance(attractions_data_process, pd.DataFrame) else attractions_data_process,
+            "michelin": michelin_data_process.to_dict(orient="records") if isinstance(michelin_data_process, pd.DataFrame) else michelin_data_process
+        }
         save_data(processed_dir, processed_file, processed_data)
-
+'''
     # Étape 4 : Clusterisation
-    cluster_dir = "data/clusters"
+    cluster_dir = "data/clusters/"
     cluster_path = data_exists(cluster_dir, cluster_file)
     if cluster_path:
         clusters_data = load_data(cluster_path)
@@ -152,7 +172,7 @@ def main(city, country, language, num_activities, sportivity, price_category):
         save_data(cluster_dir, cluster_file, clusters_data)
 
     # Étape 5 : Génération de l'itinéraire
-    itinerary_dir = "data/itinerary"
+    itinerary_dir = "data/itinerary/"
     itinerary_path = data_exists(itinerary_dir, itinerary_file, itinerary_params)
     if itinerary_path:
         itinerary_data = load_data(itinerary_path)
@@ -164,14 +184,16 @@ def main(city, country, language, num_activities, sportivity, price_category):
     # Étape 6 : Création de la carte
     print("Creating map visualization...")
     folium_map = create_map(itinerary_data)
-    map_file = f"data/output/{city_standard.lower().replace(' ', '_')}_map.html"
+    map_file = f"data/output/{city_standard.lower().replace("" ", "_")}_map.html"
     os.makedirs("data/output", exist_ok=True)
     folium_map.save(map_file)
-    print(f"Map saved to {map_file}")
+    print(f"Map saved to {map_file}")'''
 
 if __name__ == "__main__":
     # Input parameters
-    city,country = validate_city(input("Enter the city: "),input("Enter the country: "))
+    city,region,country = None,None,None
+    while not all((city,region,country)):
+        city,region,country = validate_city(input("Enter the city: "),input("Enter the country: "))
     language = get_choice("Enter the number corresponding to your language: ", LANGUAGES)
     
     # Demander le nombre d'activités
@@ -184,5 +206,5 @@ if __name__ == "__main__":
     price_category = get_choice(f"Enter the number corresponding to your price category: ({', '.join(str(i) for i in COSTS.keys())}): ", COSTS)
     
     # Run the travel planner
-    main(city,country, language, num_activities, sportivity, price_category)
+    main(city,region,country, language, num_activities, sportivity, price_category)
 
