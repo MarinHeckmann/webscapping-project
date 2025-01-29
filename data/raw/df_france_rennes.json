@@ -1,0 +1,265 @@
+{
+    "attractions": [
+        {
+            "site": "Routard",
+            "Title": "Hôtel de ville",
+            "description": "Deux élégants pavillons symétriques",
+            "rank": 0
+        },
+        {
+            "site": "Routard",
+            "Title": "Marché des Lices",
+            "description": "L’un des plus grands et des plus beaux marchés de France",
+            "rank": 1
+        },
+        {
+            "site": "Routard",
+            "Title": "Notre-Dame-en-Saint-Melaine",
+            "description": "Exemple remarquable du premier art roman en Bretagne",
+            "rank": 2
+        },
+        {
+            "site": "Routard",
+            "Title": "Opéra de Rennes",
+            "description": "Son péristyle de facture néoclassique",
+            "rank": 3
+        },
+        {
+            "site": "Routard",
+            "Title": "Parc du Thabor",
+            "description": "Jardin paysager et botanique, poumon vert de la capitale bretonne",
+            "rank": 4
+        },
+        {
+            "site": "Routard",
+            "Title": "Parlement de Bretagne",
+            "description": "Édifice majeur du patrimoine rennais",
+            "rank": 5
+        },
+        {
+            "site": "Routard",
+            "Title": "Portes Mordelaises",
+            "description": "L’un des rares vestiges des remparts du XVe siècle, lieu hautement symbolique",
+            "rank": 6
+        },
+        {
+            "site": "Routard",
+            "Title": "Place Sainte-Anne",
+            "description": "L’un des cœurs battants de la vie rennaise, entre bouquinistes et terrasses",
+            "rank": 7
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Musée des Beaux-Arts",
+            "description": NaN,
+            "rank": 0
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Palais du Parlement de Bretagne",
+            "description": NaN,
+            "rank": 1
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Piscine Saint-Georges",
+            "description": NaN,
+            "rank": 2
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Champs Libres",
+            "description": NaN,
+            "rank": 3
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Espace des Sciences",
+            "description": NaN,
+            "rank": 4
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Cathédrale St-Pierre",
+            "description": NaN,
+            "rank": 5
+        },
+        {
+            "site": "LonelyPlanet",
+            "Title": "Musée de Bretagne",
+            "description": NaN,
+            "rank": 6
+        }
+    ],
+    "michelin": [
+        {
+            "name": "Estime",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/estime",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Mid-Range",
+            "address": "15 rue du Chapitre, Rennes, 35000, France",
+            "latitude": 48.1110769,
+            "longitude": -1.6826904,
+            "gastonomie_durable": false,
+            "description": "Éclose dans une petite rue piétonne du centre-ville, cette adresse est l’œuvre de Maxime (en cuisine) et Estelle Besnier (en salle), frère et sœur. Dans un décor plaisant et coloré (poutres blanches, murs à la chaux, miroirs, cheminée en pierre et brique, parquet ancien), ce chef à la main sûre mitonne avec précision, générosité et gourmandise : sot-l'y-laisse de volaille et crème de champignons ; merlu, pommes de terre, chorizo et salicorne ; coco, kiwi et oseille. Excellent rapport qualité-prix du menu déjeuner. Un concentré de bonheur."
+        },
+        {
+            "name": "Breizh Café Rennes",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/breizh-cafe-rennes",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine bretonne",
+            "cost": "Mid-Range",
+            "address": "1 place de la Trinité, Rennes, 35000, France",
+            "latitude": 48.1123311,
+            "longitude": -1.6832891,
+            "gastonomie_durable": false,
+            "description": "Pourquoi changer une recette qui marche ? Bertrand Larcher, l’homme qui a révélé la crêpe bretonne au Pays du Soleil Levant, a posé ses billigs à Rennes à deux pas du marché des Lices. Cette adresse-là s’est installée dans un espace moderne d’esprit indus avec cuisine ouverte. Les ingrédients de la réussite sont toujours les mêmes : des produits de qualité, bio pour la plupart (froment cultivé en Bretagne et moulu à la pierre, farine de sarrasin moulue à Vitré, œufs biologiques, charcuteries basques de Pierre Oteiza). À côté des galettes classiques, il y a des versions plus originales, certaines avec une touche japonaise comme cette crêpe Kinako avec sucre noir d’Okinawa et glace matcha. Petite carte de grignotages et d’huîtres."
+        },
+        {
+            "name": "Bombance",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/bombance",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Mid-Range",
+            "address": "23 rue de la Chalotais, Rennes, 35000, France",
+            "latitude": 48.1093303,
+            "longitude": -1.682312,
+            "gastonomie_durable": false,
+            "description": "Faire bombance : manger, boire, faire la fête ! Autant de promesses tenues entre les murs de pierre de ce bistrot avec cuisine ouverte et quelques places au comptoir. À partir de 17h, on y grignote des assiettes à partager qu’on arrose d’un cru en biodynamie ou nature choisi dans la jolie carte des vins. Puis, dès 19h, on pioche dans un menu carte avec choix : pak-choï rôti, sabayon paprika et noisette torréfiée ; aile de raie, beurre d’agrumes, crème de céleri, topinambour fumé, marrons et jus de langoustine. Chaque assiette contient son lot de produits frais, très bien cuits et assaisonnés avec peps et doigté."
+        },
+        {
+            "name": "YOKO",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/yoko",
+            "stars": 0,
+            "bib-gourmand": true,
+            "cuisine": "Cuisine japonaise",
+            "cost": "Affordable",
+            "address": "20 boulevard de la Tour-d'Auvergne, Rennes, 35000, France",
+            "latitude": 48.1067069,
+            "longitude": -1.6845853,
+            "gastonomie_durable": false,
+            "description": "Voici l'annexe de la table étoilée et japonisante du chef Julien Lemarié (IMA). Dans une ambiance décontractée, on profite le midi d’une variété de donburi, plat à base de riz dont la garniture varie au gré de la saison ou de l’inspiration. Le soir, des recettes françaises savamment revisitées à la sauce japonaise, comme ces poireaux vinaigrette au miso et katsuobushi. Le tout servi avec le sourire !"
+        },
+        {
+            "name": "La Petite Ourse",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/la-petite-ourse",
+            "stars": 0,
+            "bib-gourmand": true,
+            "cuisine": "Cuisine du marché",
+            "cost": "Affordable",
+            "address": "48 boulevard de la Liberté, Rennes, 35000, France",
+            "latitude": 48.1082357,
+            "longitude": -1.6827619,
+            "gastonomie_durable": false,
+            "description": "Dans le petit chariot de Charlotte, en salle, et Germain, en cuisine, se trouvent de bons produits régionaux, principalement bio et à prix doux. Sans négliger les volailles ou les poissons, la carte met néanmoins l’accent sur le végétal : asperges blanches, praliné de graines de tournesol et citron confit ; œuf vapeur, crème de sarrasin, jus de légumes rôtis et côtes de blettes ; cake fenouil vanille, crème citron et zestes d’orange confite. La réservation s’impose car les Rennais ont compris que la table était bonne et généreuse !"
+        },
+        {
+            "name": "Le Paris-Brest by Christian Le Squer",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/le-paris-brest",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Mid-Range",
+            "address": "Gare de Rennes, Rennes, 35000, France",
+            "latitude": 48.1034946,
+            "longitude": -1.6721476,
+            "gastonomie_durable": false,
+            "description": "Christian Le Squer réinvente le buffet de gare en revisitant avec malice la cuisine traditionnelle bretonne. Alliance du design, de la bistronomie et d'une carte des vins élaborée par Eric Beaumard : une sympathique escale."
+        },
+        {
+            "name": "Fezi",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/fezi",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Mid-Range",
+            "address": "42 avenue du Sergent-Maginot, Rennes, 35000, France",
+            "latitude": 48.1098642,
+            "longitude": -1.6666906,
+            "gastonomie_durable": false,
+            "description": "Oh le gentil bistrot de quartier à prix doux, comme il en faudrait à chaque coin de rue, avec autant d'animation que de décontraction ! Fezi signifie \"fait maison\" en \"gallo\". Cédric Bruneau, le jeune chef patron, prépare en effet une bonne cuisine du marché sans fioriture, privilégiant les produits de la région ; le jour de notre repas : carpaccio de vieille, betterave, crème fumée et main de bouddha ; aile de raie, écrasé de courge et crème de moules ; curd citron, shortbread, meringue vapeur et citron noir. Vin nature ou en biodynamie."
+        },
+        {
+            "name": "Holen",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/holen",
+            "stars": 1,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine créative",
+            "cost": "Premium",
+            "address": "2 rue des Carmes, Rennes, 35000, France",
+            "latitude": 48.1083789,
+            "longitude": -1.676248,
+            "gastonomie_durable": true,
+            "description": "\"La saisonnalité dans l’assiette\" : tel est le credo de ce chef talentueux, au parcours étincelant (Auberge de l’Ill, Michel Bras, Emile Jung). Ses recettes, aux influences bretonnes, confirment son attachement aux meilleurs produits : légumes de petits producteurs locaux cultivés en permaculture, poissons issus de petits chaluts côtiers et non de pêche intensive (ce qui lui vaut d'être labélisé Greenfood). Holen possède également son potager et réalise son compost. Dans l'assiette, une cuisine éthique et goûteuse, finement réalisée, autour de menus surprises. À déguster dans un cadre de bistrot relooké aux matières naturelles. Un petit bonheur."
+        },
+        {
+            "name": "Racines",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/racines542026",
+            "stars": 1,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Premium",
+            "address": "4 passage Antoinette-Caillot, Rennes, 35000, France",
+            "latitude": 48.1069433,
+            "longitude": -1.6829655,
+            "gastonomie_durable": false,
+            "description": "Quand une cheffe rennaise pleine de talent, Virginie Giboire, flatte ses \"Racines\", cela donne une plaisante cuisine dans l’air du temps aux assiettes élégantes. Forte d’un CV en or massif (dont on retiendra seulement ses postes aux côtés de Guy Martin et de Thierry Marx qui, dit-elle \"lui a tout appris\"), elle compose une cuisine intelligente et limpide, qui tombe toujours juste, organisée autour d'une carte courte. Jeux de textures intéressants, subtilité des associations de saveurs, et toujours ces beaux produits, venus des nombreux petits producteurs bretons. Le tout dans un joli cadre moderne et lumineux."
+        },
+        {
+            "name": "Ima",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/ima",
+            "stars": 1,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine créative",
+            "cost": "Luxury",
+            "address": "20 boulevard de la Tour-d'Auvergne, Rennes, 35000, France",
+            "latitude": 48.106684,
+            "longitude": -1.684632,
+            "gastonomie_durable": true,
+            "description": "\"La cuisine a toujours été pour moi un moyen de voyager\", explique le chef Julien Lemarié, qui a promené ses couteaux de Londres à Tokyo, en passant par Singapour. Le nom de son restaurant, IMA, signifie \"maintenant\" en japonais. Une cuisine d’instinct et de technicien talentueux autour de menus dégustation surfant avec subtilité entre influences régionales et asiatiques. Le chef transcende chacun des plats à coups de bouillons, d’infusions, d’épices, de plantes aromatiques et d’algues. Ceux qui veulent vivre l'expérience à la japonaise s'installeront au comptoir. C’est désormais à vous de voyager !"
+        },
+        {
+            "name": "Essentiel",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/essentiel",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Mid-Range",
+            "address": "11 rue Armand-Rébillon, Rennes, 35000, France",
+            "latitude": 48.121689,
+            "longitude": -1.6815429,
+            "gastonomie_durable": false,
+            "description": "Sur le pittoresque canal d'Ille-et-Rance, un bâtiment original, tout de verre vêtu. Bois, briques, structure métallique : le lieu évoque un loft urbain et se révèle charmant. Bien installée aux commandes, la cheffe Blandine Lucas revisite les classiques bistrotiers, et s'appuie sur des bons produits – on pense notamment aux nombreux légumes issus du potager maison. Quelques exemples de plats ? Raviole lard et champignons, émulsion parmesan ; dos de lieu noir, risotto de blé, crème de poireau."
+        },
+        {
+            "name": "La Table du Balthazar",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/la-table-du-balthazar",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine moderne",
+            "cost": "Premium",
+            "address": "28 rue Vasselot, Rennes, 35000, France",
+            "latitude": 48.1085757,
+            "longitude": -1.6776722,
+            "gastonomie_durable": false,
+            "description": "Un repas dans un esprit brasserie chic et contemporain, réalisé avec savoir-faire par Benjamin Jourdren, ancien second passé chef en 2020. Dans le cadre du restaurant de cet hôtel – sans doute le plus élégant de Rennes – la cuisine met à l’honneur le terroir breton avec des produits de qualité, principalement locaux. Les plats sont twistés tel ce beurre travaillé au sarrasin qui accompagne le pain blanc au pavot, les Saint-Jacques snackées et travaillées au lait ribot, les ravioles de chou frisé au citron cédrat, ou bien la quenelle de crème au parfum de foin qui accompagne la pomme. La mise en place est de qualité, la vaisselle fine et le regard se pose souvent sur le patio extérieur qui se découvre grâce à une belle verrière."
+        },
+        {
+            "name": "POF",
+            "link": "https://guide.michelin.com/fr/fr/bretagne/rennes/restaurant/pof",
+            "stars": 0,
+            "bib-gourmand": false,
+            "cuisine": "Cuisine créative",
+            "cost": "Affordable",
+            "address": "35 boulevard Georges-Clemenceau, Rennes, 35200, France",
+            "latitude": 48.0946225,
+            "longitude": -1.6860225,
+            "gastonomie_durable": false,
+            "description": "Le midi, menu du jour annoncé à l’ardoise ; au dîner, petite carte de « ty plats » à partager aux noms évocateurs et ludiques (\"c’est de la boulette\" ; \"l’œuf de la mort qui tue\" ; \"ton tataki\" ; \"galette du coin-coin\") : les associés, qui ont bourlingué sur la planète, aiment la convivialité, le métissage (crème de chou-fleur au curry breton, crumble de wakame ; croustillant de quinoa, jus réduit à la mexicaine ; poire pochée myrte et badiane, mousse mascarpone au thé matcha) et la cuisine du marché au goût du jour."
+        }
+    ]
+}
